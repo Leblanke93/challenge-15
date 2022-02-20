@@ -15,8 +15,14 @@ from dateutil.relativedelta import relativedelta
 
 #Video
 
+
+
+https://user-images.githubusercontent.com/90729599/154825105-fe16fc95-6499-43e0-a210-37f9abc4bd8f.mp4
+
+
 #Lambda function test
 
+<img width="917" alt="lamba test function" src="https://user-images.githubusercontent.com/90729599/154825103-4fab9675-e4f0-490a-9d64-d41b0dd1fe8e.PNG">
 
  
  
