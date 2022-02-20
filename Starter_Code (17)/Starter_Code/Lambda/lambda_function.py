@@ -118,13 +118,64 @@ def recommend_portfolio(intent_request):
     Performs dialog management and fulfillment for recommending a portfolio.
     """
 
-    first_name = get_slots(intent_request)["firstName"]
+    first_name = get_slots(intent_request)["FirstName"]
     age = get_slots(intent_request)["age"]
     investment_amount = get_slots(intent_request)["investmentAmount"]
-    risk_level = get_slots(intent_request)["riskLevel"]
+    risk_level = get_slots(intent_request)["risklevel"]
     source = intent_request["invocationSource"]
+   ### Validate inputs
+def validate_input(first_name, age, investment_amount, risk_level,intent_request):
+    #validation to see if name is valid
+    if first_name is not None:
+        first_name=str(first_name)
+        if any(char.isdigit() for char in first_name):
+            return build_validation_result(
+                False, 
+                "firstName", 
+                "First Name contains numbers. Please retry and enter a valid first name."
+                )
+    #Validation rules if age is between 0 and 65
+    if age is not None:
+        age=parse_int(age)
+        if not(age > 0 and age < 65) :
+            return build_validation_result(
+                False,
+                "age",
+                "Your age should be greater than zero, and less than 65"
+            )
+    #validation rules if investment amount is greater than 5000
+    if  investment_amount is not None:
+        investment_amount=parse_int(investment_amount)
+        is_investment_amount_valid = investment_amount >= 5000
+        if not (is_investment_amount_valid) :
+            return build_validation_result(
+                False,
+                "investmentAmount",
+                "The amount of your investment should be greater than $5000 "
+            )
+    #Check if risk levels are within the select list (ignoring case)
+    if risk_level is not None:       
+        if not (risk_level.lower() in ['none', 'low', 'medium', 'high']):
+            return build_validation_result(
+                False,
+                "riskLevel",
+                "Your risk level can be None, Low, Medium or High"
+            )
+    return build_validation_result(True, None, None)
 
-    # YOUR CODE GOES HERE!
+### Create Recommendations
+def get_recommendation(risk_level):
+    recommendation=""
+    if (risk_level.lower()== 'none'):
+        recommendation='100% bonds (AGG), 0% equities (SPY)'
+    elif (risk_level.lower()== 'low'):
+        recommendation='60% bonds (AGG), 40% equities (SPY)'
+    elif (risk_level.lower() == 'medium'):
+        recommendation='40% bonds (AGG), 60% equities (SPY)'
+    elif (risk_level.lower() == 'high'):
+        recommendation='20% bonds (AGG), 80% equities (SPY)'
+        
+    return recommendation
 
 
 ### Intents Dispatcher ###
